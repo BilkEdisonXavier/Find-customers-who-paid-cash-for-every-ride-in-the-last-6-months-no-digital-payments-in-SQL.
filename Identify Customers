@@ -1,0 +1,33 @@
+#Problem: Identify Customers Who Paid Cash for All
+          Rides in the Last 6 Months.
+
+#Create & Insert DDL (MySQL):
+
+CREATE TABLE ride_payments (
+payment_id INT,
+customer_id INT,
+customer_name VARCHAR(50),
+payment_mode VARCHAR(20),
+ride_date DATE
+);
+INSERT INTO ride_payments VALUES
+(1, 701, 'Gowtham', 'Cash', '2025-01-10'),
+(2, 701, 'Gowtham', 'Cash', '2025-03-05'),
+(3, 702, 'Anu', 'Credit Card', '2025-02-15'),
+(4, 702, 'Anu', 'Cash', '2025-04-20');
+
+#Solution:
+
+SELECT customer_id, customer_name
+FROM ride_payments
+WHERE ride_date >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+GROUP BY customer_id, customer_name
+HAVING SUM(payment_mode != 'Cash') = 0;
+
+#Explanation:
+
+● Filtering last 6 months payments.
+● Grouping by customer to aggregate their payment modes.
+● HAVING SUM(payment_mode != 'Cash') = 0: ensures the customer never used any
+mode other than cash.
+● Result: Customers who always paid cash
